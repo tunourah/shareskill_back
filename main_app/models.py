@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 # Category
+
+STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    ]
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
@@ -26,3 +32,18 @@ class ServiceListing(models.Model):
 
     def __str__(self):
         return self.title
+    
+    # -------------------------------------------------
+class ServiceRequest(models.Model):
+    client = models.ForeignKey(User, related_name='service_requests', on_delete=models.CASCADE)
+    service_listing = models.ForeignKey(ServiceListing, related_name='service_requests', on_delete=models.CASCADE)
+    proposed_datetime = models.DateTimeField(blank=True, null=True)
+    message = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Request {self.id} by {self.client.username}"
+    
+
