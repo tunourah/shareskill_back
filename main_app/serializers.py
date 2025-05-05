@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
- 
+
+from .models import Category, ServiceListing, ServiceRequest, Review
 
 class UserSerializer(serializers.ModelSerializer):
     # Add a password field, make it write-only
@@ -19,3 +20,28 @@ class UserSerializer(serializers.ModelSerializer):
         )
       
         return user
+
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+class ServiceListingSerializer(serializers.ModelSerializer):
+    provider = serializers.ReadOnlyField(source='provider.username')
+    class Meta:
+        model = ServiceListing
+        fields = '__all__'
+
+class ServiceRequestSerializer(serializers.ModelSerializer):
+    client = serializers.ReadOnlyField(source='client.username')
+    class Meta:
+        model = ServiceRequest
+        fields = '__all__'
+
+class ReviewSerializer(serializers.ModelSerializer):
+    reviewer = serializers.ReadOnlyField(source='reviewer.username')
+    class Meta:
+        model = Review
+        fields = '__all__'
