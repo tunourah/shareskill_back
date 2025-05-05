@@ -45,5 +45,17 @@ class ServiceRequest(models.Model):
 
     def __str__(self):
         return f"Request {self.id} by {self.client.username}"
+
+# ----------------------------------------------------------
+class Review(models.Model):
+    service_request = models.OneToOneField(ServiceRequest, related_name='review', on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Review {self.id} - {self.rating} stars"
     
 
