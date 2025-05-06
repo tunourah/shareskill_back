@@ -45,3 +45,10 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+class ServiceListingDetailSerializer(serializers.ModelSerializer):
+    provider = UserSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
+
+    class Meta:
+        model = ServiceListing
+        fields = '__all__'
