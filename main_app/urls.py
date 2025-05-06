@@ -15,6 +15,10 @@ from .views import (
     ReviewListCreateView,
     ReviewDetailView,
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     # check / root
@@ -23,7 +27,8 @@ urlpatterns = [
     # Auth
     path('users/signup/', CreateUserView.as_view(), name='signup'),
     path('users/login/',  LoginView.as_view(),  name='login'),
-    path('users/verify/', VerifyUserView.as_view(), name='verify-user'),
+    path('users/token/refresh/', VerifyUserView.as_view(), name='token_refresh'),
+
 
     # Categories (admin only)
     path('categories/',         CategoryListCreateView.as_view(),   name='category-list'),

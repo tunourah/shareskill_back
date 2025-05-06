@@ -97,7 +97,7 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 # --- ServiceListing Endpoints ---
 
 class ServiceListingListCreateView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'is_active', 'location_description']
     search_fields = ['title', 'description', 'location_description']
@@ -181,7 +181,7 @@ class ServiceRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
         'client', 'service_listing', 'service_listing__provider'
     )
     serializer_class = ServiceRequestSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def perform_update(self, serializer):
         instance = serializer.instance
@@ -204,7 +204,7 @@ class ServiceRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
 # --- Review Endpoints ---
 
 class ReviewListCreateView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     serializer_class = ReviewSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ['service_request__service_listing']

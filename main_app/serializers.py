@@ -29,10 +29,17 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ServiceListingSerializer(serializers.ModelSerializer):
-    provider = serializers.ReadOnlyField(source='provider.username')
+    provider_username = serializers.ReadOnlyField(source='provider.username')
+    category_name     = serializers.ReadOnlyField(source='category.name')
+
     class Meta:
         model = ServiceListing
+        # still include all the other fields…
         fields = '__all__'
+        # …but make provider read-only so it's not required in the POST body
+        extra_kwargs = {
+            'provider': {'read_only': True},
+        }
 
 class ServiceRequestSerializer(serializers.ModelSerializer):
     client = serializers.ReadOnlyField(source='client.username')
