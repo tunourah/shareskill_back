@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-
+ 
+from django.db.models import Avg
+from .models import Review
 from .models import Category, ServiceListing, ServiceRequest, Review
 
 class UserSerializer(serializers.ModelSerializer):
@@ -43,6 +45,8 @@ class ServiceListingSerializer(serializers.ModelSerializer):
 
 class ServiceRequestSerializer(serializers.ModelSerializer):
     client = serializers.ReadOnlyField(source='client.username')
+    service_title = serializers.ReadOnlyField(source='service_listing.title')
+
     class Meta:
         model = ServiceRequest
         fields = '__all__'
@@ -53,9 +57,39 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = '__all__'
 class ServiceListingDetailSerializer(serializers.ModelSerializer):
-    provider = UserSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
+    provider     = UserSerializer(read_only=True)
+    category     = CategorySerializer(read_only=True)
+    avg_rating   = serializers.SerializerMethodField()
+    review_count = serializers.SerializerMethodField()
 
     class Meta:
         model = ServiceListing
-        fields = '__all__'
+        fields = [
+            'id',
+            'provider',
+            'category',
+            'title',
+            'description',
+            'price_description',
+            'location_description',
+            'is_active',
+            'created_at',
+            'updated_at',
+            # our extra two:
+            'avg_rating',
+            'review_count',
+        ]
+
+    def get_avg_rating(self, obj):
+        qs = Review.objects.filter(
+            service_request__service_listing=obj,
+            service_request__status='completed'
+        )
+        agg = qs.aggregate(avg=Avg('rating'))
+        return agg['avg'] or 0
+
+    def get_review_count(self, obj):
+        return Review.objects.filter(
+            service_request__service_listing=obj,
+            service_request__status='completed'
+        ).count()
