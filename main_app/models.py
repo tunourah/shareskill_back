@@ -8,6 +8,7 @@ STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
         ('rejected', 'Rejected'),
+        ('completed','Completed'),
     ]
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
