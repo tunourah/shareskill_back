@@ -1,3 +1,5 @@
+![alt text](<Unlock Community Connections and Services.png>)
+
 ## 🛠️ ShareSkill - Backend
 
 ### 📝 Brief Description
