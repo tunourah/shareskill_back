@@ -21,6 +21,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from .models import Category, ServiceListing, ServiceRequest, Review
 from .serializers import CategorySerializer, ServiceListingSerializer, ServiceRequestSerializer, ReviewSerializer , ServiceListingDetailSerializer 
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class Home(APIView):
   def get(self, request):
@@ -102,7 +103,8 @@ class ServiceListingListCreateView(generics.ListCreateAPIView):
     filterset_fields = ['category', 'is_active', 'location_description']
     search_fields = ['title', 'description', 'location_description']
     ordering_fields = ['created_at', 'title']
-    
+    parser_classes = [MultiPartParser, FormParser]
+
 
     def get_queryset(self):
         qs = ServiceListing.objects.select_related('category', 'provider')
@@ -129,6 +131,7 @@ class ServiceListingListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(provider=self.request.user)
+        
 
 
 class ServiceListingDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -145,6 +148,8 @@ class ServiceListingDetailView(generics.RetrieveUpdateDestroyAPIView):
         if instance.provider != self.request.user:
             raise PermissionDenied("You can only delete your own listings.")
         instance.delete()
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 # --- ServiceRequest Endpoints ---

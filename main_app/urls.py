@@ -19,6 +19,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     # check / root
@@ -46,3 +48,5 @@ urlpatterns = [
     path('reviews/',         ReviewListCreateView.as_view(),   name='review-list'),
     path('reviews/<int:pk>/', ReviewDetailView.as_view(),     name='review-detail'),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

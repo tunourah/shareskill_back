@@ -30,6 +30,12 @@ class ServiceListing(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(
+        upload_to='service_images/',
+        null=True,
+        blank=True,
+        help_text="Optional: Upload a photo for your listing."
+    )
 
     def __str__(self):
         return self.title

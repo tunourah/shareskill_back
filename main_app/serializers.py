@@ -61,6 +61,7 @@ class ServiceListingDetailSerializer(serializers.ModelSerializer):
     category     = CategorySerializer(read_only=True)
     avg_rating   = serializers.SerializerMethodField()
     review_count = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = ServiceListing
@@ -75,9 +76,10 @@ class ServiceListingDetailSerializer(serializers.ModelSerializer):
             'is_active',
             'created_at',
             'updated_at',
-            # our extra two:
+           
             'avg_rating',
             'review_count',
+            'image_url',
         ]
 
     def get_avg_rating(self, obj):
@@ -93,3 +95,9 @@ class ServiceListingDetailSerializer(serializers.ModelSerializer):
             service_request__service_listing=obj,
             service_request__status='completed'
         ).count()
+    def get_image_url(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            # obj.image.url is relative (e.g. '/media/service_images/foo.jpg')
+            return request.build_absolute_uri(obj.image.url)
+        return None
