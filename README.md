@@ -23,65 +23,7 @@ Key planning aspects related to the backend include:
  
 ### 📊 ERD Diagram
 
-```mermaid
-erDiagram
-    USER {
-        int id PK "User ID (Django Auth)"
-        string username
-        string email
-        string user_type "Provider or Client"
-        -- other Django User fields --
-    }
-
-    CATEGORY {
-        int id PK "Category ID"
-        string name UK "Category Name"
-        string description "Optional Description"
-        datetime created_at
-        datetime updated_at
-    }
-
-    SERVICELISTING {
-        int id PK "Service Listing ID"
-        int provider_id FK "Provider (User ID)"
-        int category_id FK "Category ID"
-        string title
-        string description
-        string price_description
-        string location_description
-        boolean is_active
-        datetime created_at
-        datetime updated_at
-    }
-
-    SERVICEREQUEST {
-        int id PK "Service Request ID"
-        int client_id FK "Client (User ID)"
-        int service_listing_id FK "Service Listing ID"
-        datetime proposed_datetime "Optional Proposed Time"
-        string message
-        string status "Request Status (Pending, Accepted, etc.)"
-        datetime created_at
-        datetime updated_at
-    }
-
-    REVIEW {
-        int id PK "Review ID"
-        int service_request_id FK "Service Request ID (Unique)"
-        int reviewer_id FK "Reviewer (User ID)"
-        int rating "Star Rating (1-5)"
-        string comment "Optional Comment"
-        datetime created_at
-        datetime updated_at
-    }
-
-    USER ||--o{ SERVICELISTING : "provides (as Provider)"
-    CATEGORY ||--o{ SERVICELISTING : "categorizes"
-    USER ||--o{ SERVICEREQUEST : "requests (as Client)"
-    SERVICELISTING ||--o{ SERVICEREQUEST : "is requested for"
-    USER ||--o{ REVIEW : "writes (as Reviewer/Client)"
-    SERVICEREQUEST ||--|| REVIEW : "has one"
-```
+![alt text](ERD.png)
 
 **Note:** The `USER` model here represents a general user. The distinction between 'Client' and 'Provider' roles can be managed via a field within the USER model (e.g., `user_type`) or through relationships if more complex role-based permissions are needed beyond what Django's built-in groups/permissions offer. The relationships shown (e.g., `USER provides SERVICELISTING`) imply the USER in that context is a Provider. Similarly, `USER requests SERVICEREQUEST` implies the USER is a Client.
 
