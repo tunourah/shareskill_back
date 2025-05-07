@@ -18,9 +18,7 @@ Key planning aspects related to the backend include:
 *   **Django**: A high-level Python web framework that encourages rapid development and clean, pragmatic design.
 *   **Django REST Framework**: A powerful and flexible toolkit for building Web APIs.
 *   **SQL (PostgreSQL/SQLite)**: Database management system (PostgreSQL for production, SQLite for development).
-*   ![Django Logo](https://www.djangoproject.com/m/img/logos/django-logo-positive.png)
-*   ![Django REST Framework Logo](https://www.django-rest-framework.org/img/logo.png)
-*   ![PostgreSQL Logo](https://www.postgresql.org/media/img/about/press/elephant.png)
+ 
 
  
 ### 📊 ERD Diagram
