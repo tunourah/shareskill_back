@@ -11,8 +11,8 @@ RUN pip install -r requirements.txt
 # Copy all application files
 COPY . .
 
-# Expose application port (for local testing only)
+# Expose application port
 EXPOSE 8000
 
-# Start with gunicorn on the correct port Render assigns
-CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:$PORT"]
+# Use sh -c to let $PORT resolve at runtime
+CMD ["sh", "-c", "gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"]
