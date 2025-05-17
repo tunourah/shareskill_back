@@ -8,9 +8,10 @@ from django.contrib.auth import authenticate
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import generics, status, filters
 from rest_framework.exceptions import PermissionDenied, ValidationError
-from rest_framework.permissions import IsAuthenticated, IsAdminUser , AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAdminUser , AllowAny , IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -85,7 +86,7 @@ class VerifyUserView(APIView):
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny] 
     
 
 
@@ -98,13 +99,12 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 # --- ServiceListing Endpoints ---
 
 class ServiceListingListCreateView(generics.ListCreateAPIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]  # ✅ Added to fix 404 due to blocked unauth access
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category', 'is_active', 'location_description']
     search_fields = ['title', 'description', 'location_description']
     ordering_fields = ['created_at', 'title']
     parser_classes = [MultiPartParser, FormParser]
-
 
     def get_queryset(self):
         qs = ServiceListing.objects.select_related('category', 'provider')
@@ -137,7 +137,7 @@ class ServiceListingListCreateView(generics.ListCreateAPIView):
 class ServiceListingDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ServiceListing.objects.select_related('category', 'provider')
     serializer_class = ServiceListingDetailSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_update(self, serializer):
         if serializer.instance.provider != self.request.user:

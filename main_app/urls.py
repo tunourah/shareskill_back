@@ -33,11 +33,12 @@ urlpatterns = [
 
 
     # Categories (admin only)
-    path('categories/',         CategoryListCreateView.as_view(),   name='category-list'),
+    path('categories/', CategoryListCreateView.as_view(), name='category-list'),
+
     path('categories/<int:pk>/', CategoryDetailView.as_view(),     name='category-detail'),
 
     # Service Listings
-    path('service-listings/',         ServiceListingListCreateView.as_view(), name='listing-list'),
+    path('service-listings/', ServiceListingListCreateView.as_view(), name='listing-list'),
     path('service-listings/<int:pk>/', ServiceListingDetailView.as_view(),   name='listing-detail'),
 
     # Service Requests
@@ -49,4 +50,6 @@ urlpatterns = [
     path('reviews/<int:pk>/', ReviewDetailView.as_view(),     name='review-detail'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+ 
+
 
