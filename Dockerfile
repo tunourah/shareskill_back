@@ -11,8 +11,8 @@ RUN pip install -r requirements.txt
 # Copy all application files
 COPY . .
 
-# Expose application port
+# Expose application port (for local testing only)
 EXPOSE 8000
 
-# Define default command
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Start with gunicorn on the correct port Render assigns
+CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:$PORT"]
