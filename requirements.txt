@@ -6,4 +6,5 @@ djangorestframework-simplejwt
 python-dotenv
 django-filter
 Pillow
+gunicorn
 
